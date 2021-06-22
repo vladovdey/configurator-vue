@@ -14,7 +14,7 @@
 
         <span>Количество портов:</span>
         <div class="calculator-input__container" @click="clickBlockFeature('changePort')">
-          <input type="number" v-bind="portNumber" @change="validateInput" @blur="portNumber = portNumber === ' ' ? 1" :disabled="currentLicense.id == 'free'" >
+          <input type="number" v-model="portNumber" @change="portNumber = portNumber === '' ? 14 : 55" @blur="portNumber = portNumber === '' ? 14 : 55" :disabled="currentLicense.id == 'free'" >
           <p>{{this.portNumber}}</p>
           <div class="calculator-counter__container" v-if="currentLicense.id != 'free'">
             <button class="calculator-counter plus" v-if="portNumber < currentLicense.ports.max" @click="portNumber++">+</button>
