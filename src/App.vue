@@ -14,7 +14,7 @@
 
         <span>Количество портов:</span>
         <div class="calculator-input__container" @click="clickBlockFeature('changePort')">
-          <input type="number" v-model="portNumber" @change="portNumber = portNumber === '' ? 14 : 55" @blur="portNumber = portNumber === '' ? 14 : 55" :disabled="currentLicense.id == 'free'" >
+          <input type="number" v-model="portNumber" @blur="portNumber = portNumber === '' ? currentLicense.ports.min : portNumber" :disabled="currentLicense.id == 'free'" >
           <p>{{this.portNumber}}</p>
           <div class="calculator-counter__container" v-if="currentLicense.id != 'free'">
             <button class="calculator-counter plus" v-if="portNumber < currentLicense.ports.max" @click="portNumber++">+</button>
@@ -135,7 +135,7 @@
 <script>
 import { licenses, addOps } from './data'
 
-const PORT_PRICE = 40000
+const PORT_PRICE = 40000;
 
 export default {
   name: 'App',
@@ -165,7 +165,6 @@ export default {
         this.currentLicense = fullLic;
         this.popupFlag = this.popupFlag ?? !this.popupFlag;
       }
-      // this.currentLicense = findFull ? findFull : prevLic;
     },
     showCart() {
       console.log(this.cart);
@@ -182,39 +181,11 @@ export default {
       this.selectedAddOps.splice(id);
       this.addOpsList.push(addOps);
     },
-    test(testVar){
-      console.log("Переключаем переменную" + testVar);
-    },
     clickBlockFeature(errorMsg){
       if(this.currentLicense.id == 'free'){
         this.popupMsg = errorMsg ? this.msg[errorMsg] : this.msg['default'];
         this.popupFlag = !this.popupFlag ?? !this.popupFlag;
       }
-    },
-    validateInput(e){
-      // const number = e.target.value
-
-      // console.log('test', number)
-      // // if(number > this.currentLicense.ports.max){
-      // //   console.log("max "+ number);
-      // //   this.portNumber = this.currentLicense.ports.max;
-      // // }else if (number < this.currentLicense.ports.min){
-      // //   console.log("else "+ number);
-      // //   this.portNumber = this.currentLicense.ports.min;
-      // // }
-      // // if (number >= this.currentLicense.ports.min && number < this.currentLicense.ports.max) {
-      // //   console.log(123);
-      // // }
-      // console.log(number / this.currentLicense.ports.max);
-      // if ( number / this.currentLicense.ports.max > 1 ) {
-      //   return this.portNumber = this.currentLicense.ports.max
-      // }
-      // if ( number / this.currentLicense.ports.max < 0) {
-      //   return this.portNumber = this.currentLicense.ports.min
-      // }
-      // this.portNumber = number
-
-      
     }
   },
   computed: {
@@ -248,7 +219,7 @@ export default {
   },
   watch: {
     currentLicense (v) {
-      this.portNumber = v.ports.min
+      this.portNumber = v.ports.min;
       if(this.currentLicense.id === 'full'){
         this.addCurrentAddOps(this.addOpsList[0]);
       }else{
@@ -258,22 +229,16 @@ export default {
       }
     },
     portNumber(v){
-      console.log('value', isFinite(parseInt(v)));
-      const number = v
-
-
-      // console.log(number / this.currentLicense.ports.max);
+      const number = v;
+      console.log(number, this.currentLicense.ports.max);
       if ( number / this.currentLicense.ports.max > 1 ) {
-        return this.portNumber = this.currentLicense.ports.max
+        return this.portNumber = this.currentLicense.ports.max;
       }
       if ( number / this.currentLicense.ports.max < 0) {
-        return this.portNumber = this.currentLicense.ports.min
+        return this.portNumber = this.currentLicense.ports.min;
       }
-      this.portNumber = number
-      console.log(typeof number, number);
-      if (isNaN(number)) {
-        return this.portNumber = 13
-      }
+
+      this.portNumber = number;
     }
   },
   created () {
